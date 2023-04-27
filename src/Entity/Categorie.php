@@ -8,9 +8,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Scalar\MagicConst\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: CategorieRepository::class)]
 #[ApiResource()]
+#[Vich\Uploadable]
 class Categorie
 {
     #[ORM\Id]
@@ -22,8 +25,12 @@ class Categorie
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $image = [];
+    #[ORM\Column(type: Types::STRING, length: 500)]
+    private ?string $image = null;
+
+    #[Vich\UploadableField(mapping: 'categorie_images', fileNameProperty: 'image')]
+
+    private ?File $imageFile = null;
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: Produit::class)]
     private Collection $produits;
@@ -54,18 +61,29 @@ class Categorie
         return $this;
     }
 
-    public function getImage(): array
+    public function setImageFile(File $image = null): self
     {
-        return $this->image;
-    }
-
-    public function setImage(array $image): self
-    {
-        $this->image = $image;
+        $this->imageFile = $image;
 
         return $this;
     }
 
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = substr($image, 0, 500); // replace 500 with the maximum length of your "image" column
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
     /**
      * @return Collection<int, Produit>
      */
