@@ -28,6 +28,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'deserialize' => false
 
         ],
+        'get' => [
+            'path' => '/categories/',
+
+        ],
 
     ]
 
@@ -45,11 +49,12 @@ class Categorie
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+
     #[ORM\Column(type: Types::STRING, length: 500)]
 
     protected ?string $image = null;
 
-    #[Vich\UploadableField(mapping: 'categorie_images', fileNameProperty: 'image')]
+    #[Vich\UploadableField(mapping: 'categorie_image', fileNameProperty: 'image')]
 
     private ?File $imageFile = null;
 
@@ -58,6 +63,9 @@ class Categorie
 
     #[ORM\OneToMany(mappedBy: 'categorie', targetEntity: SousCategorie::class)]
     private Collection $sousCategorie;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function __construct()
     {
@@ -89,7 +97,10 @@ class Categorie
     public function setImageFile( ?File $imageFile = null): void
     {
         $this->imageFile = $imageFile;
+        if (null !== $imageFile) {
 
+            $this->updatedAt = new \DateTimeImmutable();
+        }
 
     }
 
@@ -165,6 +176,18 @@ class Categorie
                 $sousCategorie->setCategorie(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }
