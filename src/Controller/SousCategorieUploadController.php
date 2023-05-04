@@ -2,11 +2,11 @@
 
 namespace App\Controller;
 use App\Entity\Categorie;
-use App\Entity\Produit;
+use App\Entity\SousCategorie;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class ProductUploadController
+class SousCategorieUploadController
 {
     private EntityManagerInterface $entityManager;
 
@@ -15,16 +15,15 @@ class ProductUploadController
         $this->entityManager = $entityManager;
     }
 
-    public function __invoke(Request $request): Produit
+    public function __invoke(Request $request): SousCategorie
     {
-        $produit = new Produit();
+        $produit = new SousCategorie();
         $imageFile = $request->files->get('imageFile');
         $imageName = $imageFile->getClientOriginalName();
-        $imageFile->move('images/produits', $imageName);
+        $imageFile->move('images/sousCategories', $imageName);
 
-        $produit->setImage('/images/produits/' . $imageName);
+        $produit->setImage('/images/sousCategories/' . $imageName);
         $produit->setName($request->request->get('name'));
-        $produit->setPrix($request->request->get('prix'));
         $produit->setUpdatedAt(new \DateTimeImmutable());
 
 

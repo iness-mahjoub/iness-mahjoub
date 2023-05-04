@@ -26,3 +26,5 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Controller\ProductUploadController:
         tags: [ 'controller.service_arguments' ]
+    App\Controller\SousCategorieUploadController:
+        tags: [ controller.service_arguments ]

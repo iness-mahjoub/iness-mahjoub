@@ -46,11 +46,17 @@ class Produit
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: '0')]
     private ?string $prix = null;
 
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+
     #[ORM\Column(type: Types::STRING, length: 500)]
 
     protected ?string $image = null;
 
-    #[Vich\UploadableField(mapping: 'categorie_images', fileNameProperty: 'image')]
+
+    #[Vich\UploadableField(mapping: 'produit_image', fileNameProperty: 'image')]
 
     private ?File $imageFile = null;
 
@@ -105,8 +111,10 @@ class Produit
      */
     public function setImageFile( ?File $imageFile = null): void
     {
-        $this->imageFile = $imageFile;
+        $this->imageFile = $imageFile; if (null !== $imageFile) {
 
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     }
 
@@ -197,5 +205,21 @@ class Produit
         $this->categorie = $categorie;
 
         return $this;
+    }
+
+    /**
+     * @return \DateTimeImmutable|null
+     */
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTimeImmutable|null $updatedAt
+     */
+    public function setUpdatedAt(?\DateTimeImmutable $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 }
