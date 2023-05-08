@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 
 
+use App\Controller\CategorieUpdateController;
+use App\Controller\CategoriUpdateController;
 use App\Controller\ImageUploadController;
 use App\Repository\CategorieRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,21 +22,28 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 #[ApiResource(
     collectionOperations: [
-
-
         'post' => [
 
             'controller'=>ImageUploadController::class,
             'deserialize' => false
-
         ],
         'get' => [
             'path' => '/categories/',
-
         ],
+    ],
+    itemOperations: [
+    'get',
+    'put' => [
 
-    ]
-
+        'controller'=>ImageUploadController::class,
+        'deserialize' => false,
+    ],
+        'patch' => [
+            'controller' => CategoriUpdateController::class,
+            'deserialize' => false,
+        ],
+    'delete'
+]
 )]
 
 

@@ -31,7 +31,18 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'path' => '/produits/',
 
         ],
+
+    ],
+    itemOperations: [
+        'get',
+        'put' => [
+
+            'controller'=>ProductUploadController::class,
+            'deserialize' => false,
+        ],
+        'delete'
     ]
+
 )]
 class Produit
 {
